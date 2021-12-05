@@ -26,7 +26,7 @@ void Particle::collide(Particle& p)
     float tmpS1Y = speedY;
     float tmpS2X = p.speedX;
     float tmpS2Y = p.speedY;
-
+    
     speedX = mass_constant * tmpS1X + 2 * p.mass/(mass+p.mass) * tmpS2X; 
     speedY = mass_constant * tmpS1Y + 2 * p.mass/(mass+p.mass) * tmpS2Y; 
     
@@ -43,10 +43,9 @@ void Particle::update(float delta_seconds /* = 1 */, std::vector<Particle*>& par
     posY -= (speedY+0.5f*accelerationY*delta_seconds)*delta_seconds;
 
 //    std::cout << "Particle: " << this << " posX: " << posX << " speedX: " << speedX << " Seconds: " << delta_seconds << std::endl;
-
-    checkCollision(particles);
+	checkCollision(calculateGravitation(particles));
 }
-void Particle::checkCollision(std::vector<Particle*>& particles)
+void Particle::checkCollision(std::vector<Particle*> particles)
 {
     //If collides with boundary perform perfectly elastic collision with heavy object at rest
     if(posX+size>=S_WIDTH || posX-size<0)
@@ -60,13 +59,32 @@ void Particle::checkCollision(std::vector<Particle*>& particles)
         speedY *= -1;
     }
 
-    // Check if there are other particles that intersect this one;
+	for (auto p:particles)	collide(*p);
+
+}
+std::vector<Particle*> Particle::calculateGravitation(std::vector<Particle*>& particles){
+    std::vector<Particle*> p;
+
+	float acc=0, distance, g_x, g_y, h;
+
     for(auto particle:particles)
     {
-        float distance = std::sqrt(std::pow(posX-particle->posX, 2)+std::pow(posY-particle->posY, 2));
-        if(distance < size*2 && this != particle)
-        {
-            collide(*particle);
-        }
+		if (particle == this) continue;
+
+        distance = std::sqrt((posX-particle->posX)*(posX-particle->posX)+(posY-particle->posY)*(posY-particle->posY));
+
+        if(distance < size*2 && this != particle)   p.push_back(particle);
+
+		g_x = posX - particle->posX;
+		g_y = posY - particle->posY;
+
+		acc = G_CONST * mass * particle->mass/(distance * distance)*PX_P_M*PX_P_M;
+
+		h = std::sqrt(g_x*g_x+g_y*g_y);
+		//					For proper direction
+		accelerationX = (1*!(g_x>0)+-1*(g_x>0)) * acc * std::abs(g_x/h);
+		accelerationY = (1*!(g_y<0)+-1*(g_y<0)) * acc * std::abs(g_y/h);
+//        std::cout << "AccX: " << accelerationX << "AccY: " << accelerationY << std::endl;
     }
+    return p;
 }

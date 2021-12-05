@@ -7,7 +7,7 @@ A small project to simulate basic variables that affect particle-particle intera
 - Boundary collision
 
 ## Variables to add
-- [ ] Particle-Particle gravity simulation
+- [X] Particle-Particle gravity simulation
 
 ## Known bugs
 - [ ] Boundary collision checker is doing weird stuffs
