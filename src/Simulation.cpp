@@ -16,13 +16,14 @@ Simulate::Simulate()
         pos[i][0] = rand()%S_WIDTH+10;
         pos[i][1] = rand()%HEIGHT+10;
         
-//        speed[i][0] = (rand()%P_S_MAX+P_S_MIN)/100.f;
-//        speed[i][1] = (rand()%P_S_MAX+P_S_MIN)/100.f;
-        speed[i][0] = 0;
-        speed[i][1] = 0;
+        speed[i][0] = (rand()%P_S_MAX+P_S_MIN)/100.f;
+        speed[i][1] = (rand()%P_S_MAX+P_S_MIN)/100.f;
     }
 
-    for(u_int64_t i=0;i<P_NUMBER; i++)   particles.push_back(new Particle(pos[i][0], pos[i][1], speed[i][0], speed[i][1]));
+//    for(u_int64_t i=0;i<P_NUMBER; i++)   particles.push_back(new Particle(pos[i][0], pos[i][1], speed[i][0], speed[i][1]));
+
+    particles.push_back(new Particle(S_WIDTH*0.5, HEIGHT/2, -0.1, 0));
+    particles.push_back(new Particle(S_WIDTH*0.4, HEIGHT/4, 0.1, 0));
 
     _texture.create(S_WIDTH, HEIGHT);
     this->setTexture(_texture.getTexture());
