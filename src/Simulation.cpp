@@ -22,8 +22,8 @@ Simulate::Simulate()
 
 //    for(u_int64_t i=0;i<P_NUMBER; i++)   particles.push_back(new Particle(pos[i][0], pos[i][1], speed[i][0], speed[i][1]));
 
-    particles.push_back(new Particle(S_WIDTH*0.5, HEIGHT/2, -0.1, 0));
-    particles.push_back(new Particle(S_WIDTH*0.4, HEIGHT/4, 0.1, 0));
+    particles.push_back(new Particle(S_WIDTH*0.5, HEIGHT/2, -0.35, 0));
+    particles.push_back(new Particle(S_WIDTH*0.4, HEIGHT/4, 0.35, 0));
 
     _texture.create(S_WIDTH, HEIGHT);
     this->setTexture(_texture.getTexture());
@@ -59,9 +59,12 @@ void Simulate::start()
     while(true)
     {
         double time_taken = timer.timeGoneMicro()/1000000;
-        for(auto particle:particles)
+        for(int i=0;i<P_NUMBER;i++)
         {
-            if (isRunning) particle->update(time_taken, particles);
+            for(int j=0;j<i;j++)
+            {
+                    particles[i]->update(time_taken, particles[j]);
+            }
         }
         std::this_thread::sleep_for(std::chrono::milliseconds(I_DELAY));
     }

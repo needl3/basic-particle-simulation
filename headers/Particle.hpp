@@ -17,7 +17,7 @@ class Particle{
         
         Particle(float, float, float, float);
         void collide(Particle&);
-        void update(float, std::vector<Particle*>&);
-        void checkCollision(std::vector<Particle*>);
-        std::vector<Particle*> calculateGravitation(std::vector<Particle*>&);
+        void update(float, Particle*);
+        void checkCollision(Particle*, float);
+        float calculateGravitation(Particle*);
 };
